@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Lora } from "next/font/google/";
+import { Lora } from "next/font/google";
 import "./globals.css";
 
-const lora = Lora({ subsets: ["latin"] });
+const lora = Lora({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: { template: "%s | Awesome Shop", absolute: "Awesome Shop" },
