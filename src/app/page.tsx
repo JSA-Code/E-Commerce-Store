@@ -19,7 +19,7 @@ export default function Home() {
             </Link>
           </Button>
         </div>
-        <div className="hidden h-full w-1/2 md:block">
+        <div className="relative hidden h-full w-1/2 md:block">
           <Image
             src={banner}
             alt="Awesome Sauce banner"
