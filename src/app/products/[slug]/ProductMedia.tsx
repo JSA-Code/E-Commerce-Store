@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { products } from "@wix/stores";
 import { PlayIcon } from "lucide-react";
 import { useState } from "react";
+import Zoom from "react-medium-image-zoom";
 
 interface ProductMediaProps {
   media: products.MediaItem[] | undefined;
@@ -18,15 +19,17 @@ export default function ProductMedia({ media }: ProductMediaProps) {
   const selectedVideo = selectedMedia?.video?.files?.[0];
 
   return (
-    <div className="basis-2/5 md:sticky">
+    <div className="h-fit basis-2/5 space-y-5 md:sticky md:top-0">
       <div className="aspect-square bg-secondary">
         {selectedImage?.url ? (
-          <WixImage
-            mediaIdentifier={selectedImage?.url}
-            alt={selectedImage?.altText}
-            width={1000}
-            height={1000}
-          />
+          <Zoom key={selectedImage.url}>
+            <WixImage
+              mediaIdentifier={selectedImage?.url}
+              alt={selectedImage?.altText}
+              width={1000}
+              height={1000}
+            />
+          </Zoom>
         ) : selectedVideo?.url ? (
           <div className="flex size-full items-center bg-black">
             <video className="size-full" controls>
