@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import AddToCartButton from "@/components/AddToCartButton";
 
 interface ProductDetailsProps {
   product: products.Product;
@@ -39,10 +40,22 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
     selectedVariant?.stock?.quantity ?? product.stock?.quantity;
   const availableQuantityExceeded =
     !!availableQuantity && quantity > availableQuantity;
+  const selectedOptionsMedia = product.productOptions?.flatMap((option) => {
+    const selectedChoice = option.choices?.find(
+      (choice) => choice.description === selectedOptions[option.name || ""],
+    );
+    return selectedChoice?.media?.items ?? [];
+  });
 
   return (
     <div className="flex flex-col gap-10 md:flex-row lg:gap-20">
-      <ProductMedia media={product.media?.items} />
+      <ProductMedia
+        media={
+          !!selectedOptionsMedia?.length
+            ? selectedOptionsMedia
+            : product.media?.items
+        }
+      />
       <div className="basis-3/5 space-y-5">
         <div className="space-y-2.5">
           <h1 className="text-3xl font-bold lg:text-4xl">{product.name}</h1>
@@ -82,6 +95,15 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
               )}
           </div>
         </div>
+        {inStock ? (
+          <AddToCartButton
+            product={product}
+            selectedOptions={selectedOptions}
+            quantity={quantity}
+          />
+        ) : (
+          "Out of stock"
+        )}
         {!!product.additionalInfoSections?.length && (
           <div className="space-y-1.5 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
