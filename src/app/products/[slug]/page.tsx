@@ -13,7 +13,8 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(await getWixServerClient(), slug);
+  const wixServerClient = await getWixServerClient();
+  const product = await getProductBySlug(wixServerClient, slug);
 
   if (!product?._id) notFound();
 

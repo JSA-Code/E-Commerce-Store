@@ -46,7 +46,6 @@ async function FeaturedProducts() {
   await delay(1000);
 
   const wixClient = await getWixServerClient();
-
   const collection = await getCollectionBySlug(wixClient, "featured-products");
 
   if (!collection?._id) {
