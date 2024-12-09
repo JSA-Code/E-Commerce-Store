@@ -97,9 +97,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
         </div>
         {inStock ? (
           <AddToCartButton
+            className="w-full"
             product={product}
             selectedOptions={selectedOptions}
             quantity={quantity}
+            disabled={availableQuantityExceeded || quantity < 1}
           />
         ) : (
           "Out of stock"

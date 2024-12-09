@@ -3,13 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCart } from "@/wix-api/cart";
 import { getWixServerClient } from "@/lib/wix-client.server";
+import ShoppingCartButton from "./ShoppingCartButton";
 
 export default async function Navbar() {
   const wixServerClient = await getWixServerClient();
   const cart = await getCart(wixServerClient);
-
-  const totalQuantity =
-    cart?.lineItems.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
 
   return (
     <header className="bg-background shadow-sm">
@@ -23,7 +21,7 @@ export default async function Navbar() {
           />
           <span className="text-xl font-bold">Awesome Sauce Shop</span>
         </Link>
-        {totalQuantity} items in your cart
+        <ShoppingCartButton initialData={cart} />
       </div>
     </header>
   );
