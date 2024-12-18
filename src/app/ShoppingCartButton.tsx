@@ -8,9 +8,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import WixImage from "@/components/WixImage";
-import { useCart } from "@/hooks/cart";
+import {
+  useCart,
+  useRemoveCartItem,
+  useUpdateCartItemQuantity,
+} from "@/hooks/cart";
 import { currentCart } from "@wix/ecom";
-import { ShoppingCartIcon } from "lucide-react";
+import { Loader2, ShoppingCartIcon, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -50,17 +54,43 @@ export default function ShoppingCartButton({
               </span>
             </SheetTitle>
           </SheetHeader>
-          <div className="flex grow flex-col space-y-5 overflow-y-auto">
+          <div className="flex grow flex-col space-y-5 overflow-y-auto pt-1">
             <ul className="space-y-5">
               {cartQuery.data?.lineItems?.map((item) => (
-                <ShoppingCartItem key={item._id} item={item} />
+                <ShoppingCartItem
+                  key={item._id}
+                  item={item}
+                  onProductLinkClicked={() => setSheetOpen(false)}
+                />
               ))}
             </ul>
-            <pre>{JSON.stringify(cartQuery.data, null, 2)}</pre>
+            {cartQuery.isPending && (
+              <Loader2 className="mx-auto animate-spin" />
+            )}
+            {cartQuery.error && (
+              <p className="text-destructive">{cartQuery.error.message}</p>
+            )}
+            {!cartQuery.isPending && !cartQuery.data?.lineItems?.length && (
+              <div className="flex grow items-center justify-center text-center">
+                <div className="space-y-1.5">
+                  <p className="text-lg font-semibold">Your cart is empty</p>
+                  <Link
+                    className="text-primary hover:underline"
+                    href="/shop"
+                    onClick={() => setSheetOpen(false)}
+                  >
+                    Start shopping now
+                  </Link>
+                </div>
+              </div>
+            )}
+            {/* view data */}
+            {/* <pre>{JSON.stringify(cartQuery.data, null, 2)}</pre> */}
           </div>
+          <hr />
           <div className="flex items-center justify-between gap-5">
             <div className="space-y-0.5">
-              <p className="text-sm">Subtotal amount</p>
+              <p className="text-sm">Subtotal amount:</p>
               <p className="font-bold">
                 {/* @ts-expect-error wix sdk type does not include subtotal for some reason */}
                 {cartQuery.data?.subtotal?.formattedConvertedAmount}
@@ -70,7 +100,12 @@ export default function ShoppingCartButton({
               </p>
             </div>
             <div>
-              <Button size="lg">Checkout</Button>
+              <Button
+                disabled={!totalQuantity || cartQuery.isFetching}
+                size="lg"
+              >
+                Checkout
+              </Button>
             </div>
           </div>
         </SheetContent>
@@ -81,9 +116,19 @@ export default function ShoppingCartButton({
 
 interface ShoppingCartItemProps {
   item: currentCart.LineItem;
+  onProductLinkClicked: () => void;
 }
 
-function ShoppingCartItem({ item }: ShoppingCartItemProps) {
+function ShoppingCartItem({
+  item,
+  onProductLinkClicked,
+}: ShoppingCartItemProps) {
+  const updateQuantityMutation = useUpdateCartItemQuantity();
+  const removeItemMutation = useRemoveCartItem();
+  const productId = item._id;
+
+  if (!productId) return null;
+
   const slug = item.url?.split("/").pop();
   const quantityLimitReached =
     !!item.quantity &&
@@ -92,17 +137,25 @@ function ShoppingCartItem({ item }: ShoppingCartItemProps) {
 
   return (
     <li className="flex items-center gap-3">
-      <Link href={`/products/${slug}`}>
-        <WixImage
-          className="flex-none bg-secondary"
-          mediaIdentifier={item.image}
-          width={110}
-          height={110}
-          alt={item.productName?.translated || "Product image"}
-        />
-      </Link>
+      <div className="relative size-fit flex-none">
+        <Link href={`/products/${slug}`} onClick={onProductLinkClicked}>
+          <WixImage
+            className="flex-none bg-secondary"
+            mediaIdentifier={item.image}
+            width={110}
+            height={110}
+            alt={item.productName?.translated || "Product image"}
+          />
+        </Link>
+        <button
+          className="absolute -right-1 -top-1 rounded-full border bg-background p-0.5"
+          onClick={() => removeItemMutation.mutate(productId)}
+        >
+          <X className="size-3" />
+        </button>
+      </div>
       <div className="space-y-1.5 text-sm">
-        <Link href={`/products/${slug}`}>
+        <Link href={`/products/${slug}`} onClick={onProductLinkClicked}>
           <p className="font-bold">{item.productName?.translated || "Item"}</p>
         </Link>
         {!!item.descriptionLines?.length && (
@@ -115,6 +168,44 @@ function ShoppingCartItem({ item }: ShoppingCartItemProps) {
               .join(", ")}
           </p>
         )}
+        <div className="flex items-center gap-2">
+          {item.quantity} x {item.price?.formattedConvertedAmount}
+          {item.fullPrice && item.fullPrice?.amount !== item.price?.amount && (
+            <span className="text-muted-foreground line-through">
+              {item.fullPrice.formattedConvertedAmount}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Button
+            onClick={() =>
+              updateQuantityMutation.mutate({
+                productId,
+                newQuantity: !item.quantity ? 0 : item.quantity - 1,
+              })
+            }
+            variant="outline"
+            size="sm"
+            disabled={item.quantity === 1}
+          >
+            -
+          </Button>
+          <span>{item.quantity}</span>
+          <Button
+            onClick={() =>
+              updateQuantityMutation.mutate({
+                productId,
+                newQuantity: !item.quantity ? 1 : item.quantity + 1,
+              })
+            }
+            variant="outline"
+            size="sm"
+            disabled={quantityLimitReached}
+          >
+            +
+          </Button>
+          {quantityLimitReached && <span>Quantity limit reached</span>}
+        </div>
       </div>
     </li>
   );
