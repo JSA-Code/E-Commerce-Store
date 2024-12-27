@@ -1,7 +1,6 @@
 "use client";
 
 import Badge from "@/components/ui/badge";
-import WixImage from "@/components/WixImage";
 import { products } from "@wix/stores";
 import ProductOptions from "@/app/products/[slug]/ProductOptions";
 import { useState } from "react";
@@ -18,6 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import AddToCartButton from "@/components/AddToCartButton";
+import BackInStockNotificationButton from "@/components/BackInStockNotificationButton";
 
 interface ProductDetailsProps {
   product: products.Product;
@@ -104,7 +104,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
             disabled={availableQuantityExceeded || quantity < 1}
           />
         ) : (
-          "Out of stock"
+          <BackInStockNotificationButton
+            className="w-full"
+            product={product}
+            selectedOptions={selectedOptions}
+          />
         )}
         {!!product.additionalInfoSections?.length && (
           <div className="space-y-1.5 text-sm text-muted-foreground">
