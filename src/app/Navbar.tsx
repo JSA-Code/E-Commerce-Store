@@ -4,10 +4,15 @@ import Image from "next/image";
 import { getCart } from "@/wix-api/cart";
 import { getWixServerClient } from "@/lib/wix-client.server";
 import ShoppingCartButton from "./ShoppingCartButton";
+import UserButton from "@/components/UserButton";
+import { getLoggedInMember } from "@/wix-api/members";
 
 export default async function Navbar() {
   const wixServerClient = await getWixServerClient();
-  const cart = await getCart(wixServerClient);
+  const [cart, loggedInMember] = await Promise.all([
+    getCart(wixServerClient),
+    getLoggedInMember(wixServerClient),
+  ]);
 
   return (
     <header className="bg-background shadow-sm">
@@ -21,7 +26,10 @@ export default async function Navbar() {
           />
           <span className="text-xl font-bold">Awesome Sauce Shop</span>
         </Link>
-        <ShoppingCartButton initialData={cart} />
+        <div className="flex items-center justify-center gap-5">
+          <UserButton loggedInMember={loggedInMember} />
+          <ShoppingCartButton initialData={cart} />
+        </div>
       </div>
     </header>
   );

@@ -1,4 +1,4 @@
-import { WIX_STORES_APP_IP } from "@/lib/constants";
+import { WIX_STORES_APP_ID } from "@/lib/constants";
 import { findVariant } from "@/lib/utils";
 import { WixClient } from "@/lib/wix-client.base";
 import { products } from "@wix/stores";
@@ -33,7 +33,7 @@ export async function addToCart(
     lineItems: [
       {
         catalogReference: {
-          appId: WIX_STORES_APP_IP,
+          appId: WIX_STORES_APP_ID,
           catalogItemId: product._id,
           options: selectedVariant
             ? {

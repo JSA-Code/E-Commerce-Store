@@ -1,4 +1,4 @@
-import { WIX_STORES_APP_IP_BACK_IN_STOCK_NOTIFICATIONS } from "@/lib/constants";
+import { WIX_STORES_APP_ID_BACK_IN_STOCK_NOTIFICATIONS } from "@/lib/constants";
 import { findVariant } from "@/lib/utils";
 import { WixClient } from "@/lib/wix-client.base";
 import { products } from "@wix/stores";
@@ -26,7 +26,7 @@ export async function createBackInStockNotificationRequest(
       email,
       itemUrl,
       catalogReference: {
-        appId: WIX_STORES_APP_IP_BACK_IN_STOCK_NOTIFICATIONS,
+        appId: WIX_STORES_APP_ID_BACK_IN_STOCK_NOTIFICATIONS,
         catalogItemId: product._id,
         options: selectedVariant
           ? {
