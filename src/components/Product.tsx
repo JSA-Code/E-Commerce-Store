@@ -9,6 +9,9 @@ interface ProductProps {
   product: products.Product;
 }
 
+// * VID "resizing img requires compute power = $$$, but free on WIX"
+// * "could've used Next Image as it resizes img which requires whitelisting in next.config"
+// * "but if URL not owned, anyone can use our server to resize/compute img"
 export default function Product({ product }: ProductProps) {
   const mainImage = product.media?.mainMedia?.image;
 

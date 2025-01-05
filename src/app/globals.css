@@ -4,6 +4,8 @@
 
 @import "~react-medium-image-zoom/dist/styles.css";
 
+/* TODO how does all of this work? */
+/* TODO adjust dark and prob light mode */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -58,6 +60,10 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    [data-rmiz-modal-overlay="visible"] {
+      background-color: rgb(30, 30, 30);
+    }
   }
 }
 

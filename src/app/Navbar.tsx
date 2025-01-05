@@ -7,6 +7,7 @@ import ShoppingCartButton from "./ShoppingCartButton";
 import UserButton from "@/components/UserButton";
 import { getLoggedInMember } from "@/wix-api/members";
 
+// * fetching data on server side fetches data before page has rendered
 export default async function Navbar() {
   const wixServerClient = await getWixServerClient();
   const [cart, loggedInMember] = await Promise.all([

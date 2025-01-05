@@ -20,6 +20,7 @@ export default function Home() {
             Fill your heart with sunshine
           </h1>
           <p>Become awesome and saucey when you purchase from us!</p>
+          {/* // * asChild prop uses parent's styling but uses child comp as main comp */}
           <Button asChild>
             <Link href="/shop">
               Shop Now <ArrowRight className="ml-2 size-5" />
@@ -72,6 +73,7 @@ async function FeaturedProducts() {
   );
 }
 
+// TODO conditionally sized skeleton based on size of device and add animation/shimmer
 function LoadingSkeleton() {
   return (
     <div className="flex grid-cols-2 flex-col gap-5 pt-12 sm:grid md:grid-cols-3 lg:grid-cols-4">

@@ -27,6 +27,7 @@ export default function ShoppingCartButton({
 }: ShoppingCartButtonProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const cartQuery = useCart(initialData);
+  // TODO how does array reduce function work?
   const totalQuantity =
     cartQuery.data?.lineItems?.reduce(
       (acc, item) => acc + (item.quantity || 0),
@@ -36,8 +37,8 @@ export default function ShoppingCartButton({
   return (
     <>
       <div className="relative">
+        {/* // * this Shadcn btn does has FIXED size of "[&_svg]:size-4" which prevents ShoppingCartIcon below from sizing correctly */}
         <Button variant="ghost" size="icon" onClick={() => setSheetOpen(true)}>
-          {/* TODO inc size shopping cart */}
           <ShoppingCartIcon />
           <span className="absolute right-0 top-0 flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
             {totalQuantity < 10 ? totalQuantity : "9+"}
@@ -84,15 +85,15 @@ export default function ShoppingCartButton({
                 </div>
               </div>
             )}
-            {/* view data */}
-            {/* <pre>{JSON.stringify(cartQuery.data, null, 2)}</pre> */}
+            {/* // * <pre> preserves formatting, other args for JSON.stringify() adds whitespaces */}
+            {/* // * <pre>{JSON.stringify(cartQuery.data, null, 2)}</pre> */}
           </div>
           <hr />
           <div className="flex items-center justify-between gap-5">
             <div className="space-y-0.5">
               <p className="text-sm">Subtotal amount:</p>
               <p className="font-bold">
-                {/* @ts-expect-error wix sdk type does not include subtotal for some reason */}
+                {/* @ts-expect-error // * wix sdk type does not include subtotal, expect vs ignore better bc indicates once subtotal is fixed */}
                 {cartQuery.data?.subtotal?.formattedConvertedAmount}
               </p>
               <p className="text-xs text-muted-foreground">
@@ -147,11 +148,12 @@ function ShoppingCartItem({
             alt={item.productName?.translated || "Product image"}
           />
         </Link>
+        {/* // * regular btn bc Shadcn styling not needed */}
         <button
           className="absolute -right-1 -top-1 rounded-full border bg-background p-0.5"
           onClick={() => removeItemMutation.mutate(productId)}
         >
-          <X className="size-3" />
+          <X className="size-4" />
         </button>
       </div>
       <div className="space-y-1.5 text-sm">

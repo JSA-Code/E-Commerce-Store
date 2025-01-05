@@ -19,6 +19,7 @@ export default function AddToCartButton({
   ...props
 }: AddToCartButtonProps) {
   const mutation = useAddItemToCart();
+
   return (
     <LoadingButton
       className={cn("flex gap-3", className)}

@@ -1,6 +1,7 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+// * uses zod to validate env vars and for client side
 export const env = createEnv({
   server: {},
   client: {

@@ -19,7 +19,9 @@ import { useToast } from "./use-toast";
 
 const queryKey: QueryKey = ["cart"];
 
-// * initialData is cart server side to show correct cart num asap, then passed to react query for caching
+// * is react hook bc uses useQuery hook, will be deduped if useCart() is called in several locations
+// * initialData is passed from server side (although client fetching) to show correct cart num asap or else 0 shown
+// * fetching data on client side takes a moment bc it fetches after page has rendered
 export function useCart(initialData: currentCart.Cart | null) {
   return useQuery({
     queryKey: queryKey,
@@ -28,6 +30,11 @@ export function useCart(initialData: currentCart.Cart | null) {
   });
 }
 
+// * useMutation() updates data on server
+// * could've NOT used ^, but used try-catch block and manage own state
+// * benefits of useMutation() are handles loading/error state and useful callback funcs
+// * cancelQueries() prevents outdated data from being fetched on in progress reqs (race conditions)
+// ? how does setQueryData() update cache w/ new data and change quantity for ShoppingCartButton automatically (w/o rerendering?)?
 export function useAddItemToCart() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -50,6 +57,11 @@ export function useAddItemToCart() {
   });
 }
 
+// * previousCart/State is returned to allow data to be reverted
+// * setQueryData() in onMutate directly modded cache which requires us searching for correct prod w/ ID vs WIX's backend
+// * onSettled() occurs on either error or success states
+// * added if statement to prevent race conditions (only makes reqs when not clicking button) by using mutation key/isMutating()
+// * invalidateQueries() calls for refetch of data from WIX
 export function useUpdateCartItemQuantity() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -63,7 +75,6 @@ export function useUpdateCartItemQuantity() {
       await queryClient.cancelQueries({ queryKey });
       const previousState =
         queryClient.getQueryData<currentCart.Cart>(queryKey);
-
       queryClient.setQueryData<currentCart.Cart>(queryKey, (oldData) => ({
         ...oldData,
         lineItems: oldData?.lineItems?.map((lineItem) =>
@@ -102,7 +113,6 @@ export function useRemoveCartItem() {
       await queryClient.cancelQueries({ queryKey });
       const previousState =
         queryClient.getQueryData<currentCart.Cart>(queryKey);
-
       queryClient.setQueryData<currentCart.Cart>(queryKey, (oldData) => ({
         ...oldData,
         lineItems: oldData?.lineItems?.filter(

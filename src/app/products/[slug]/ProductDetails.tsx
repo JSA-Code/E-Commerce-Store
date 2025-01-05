@@ -114,7 +114,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           <div className="space-y-1.5 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
               <InfoIcon className="size-5" />
-              <span>Additional product information</span>
+              Additional product information
             </span>
             <Accordion type="multiple">
               {product.additionalInfoSections.map((section) => (

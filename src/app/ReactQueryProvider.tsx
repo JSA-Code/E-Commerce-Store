@@ -9,7 +9,10 @@ export default function ReactQueryProvider({
 }: {
   children: React.ReactNode;
 }) {
+  // TODO verify this
+  // * using state bc don't want query provider to change or else cache will also change
   const [client] = useState(new QueryClient());
+
   return (
     <QueryClientProvider client={client}>
       {children}
