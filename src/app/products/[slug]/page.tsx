@@ -1,9 +1,9 @@
 import { getProductBySlug } from "@/wix-api/products";
-import { notFound } from "next/navigation";
 import ProductDetails from "./ProductDetails";
 import { Metadata } from "next";
 import { delay } from "@/lib/utils";
 import { getWixServerClient } from "@/lib/wix-client.server";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: { slug: string };
@@ -12,8 +12,8 @@ interface PageProps {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
   const wixServerClient = await getWixServerClient();
+  const { slug } = await params;
   const product = await getProductBySlug(wixServerClient, slug);
 
   if (!product?._id) notFound();
@@ -40,9 +40,10 @@ export async function generateMetadata({
 
 export default async function Page({ params }: PageProps) {
   await delay(2000);
-  // ? is this correct to use "await"? docs says so
+  // ? is this correct to use "await"? docs says yes
+  const wixServerClient = await getWixServerClient();
   const { slug } = await params;
-  const product = await getProductBySlug(await getWixServerClient(), slug);
+  const product = await getProductBySlug(wixServerClient, slug);
 
   if (!product?._id) notFound();
 

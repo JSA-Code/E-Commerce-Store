@@ -71,11 +71,6 @@ export default function UserButton({
           <DropdownMenuPortal>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  <Monitor className="mr-2 size-4" />
-                  System default
-                  {theme === "system" && <Check className="ms-2 size-4" />}
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                   <Sun className="mr-2 size-4" />
                   Light
@@ -85,6 +80,11 @@ export default function UserButton({
                   <Moon className="mr-2 size-4" />
                   Dark
                   {theme === "dark" && <Check className="ms-2 size-4" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  <Monitor className="mr-2 size-4" />
+                  System default
+                  {theme === "system" && <Check className="ms-2 size-4" />}
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>

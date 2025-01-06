@@ -33,6 +33,7 @@ export default function Home() {
             alt="Awesome Sauce banner"
             className="h-full object-cover"
           />
+          {/* // * gradient overlay, starting from LtoR, two transparent means 2/3 show more of that side */}
           <div className="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-transparent" />
         </div>
       </div>
@@ -46,14 +47,17 @@ export default function Home() {
 async function FeaturedProducts() {
   await delay(1000);
 
-  const wixClient = await getWixServerClient();
-  const collection = await getCollectionBySlug(wixClient, "featured-products");
+  const wixServerClient = await getWixServerClient();
+  const collection = await getCollectionBySlug(
+    wixServerClient,
+    "featured-products",
+  );
 
   if (!collection?._id) {
     return null;
   }
 
-  const featuredProducts = await queryProducts(wixClient, {
+  const featuredProducts = await queryProducts(wixServerClient, {
     collectionIds: collection._id,
   });
 

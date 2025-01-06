@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
     return new Response("Invalid request", { status: 400 });
   }
 
-  const wixClient = await getWixServerClient();
-  const memberTokens = await wixClient.auth.getMemberTokens(
+  const wixServerClient = await getWixServerClient();
+  const memberTokens = await wixServerClient.auth.getMemberTokens(
     code,
     state,
     oAuthData,
