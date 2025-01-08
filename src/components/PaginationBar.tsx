@@ -17,6 +17,7 @@ interface PaginationProps {
   totalPages: number;
 }
 
+// * benefits to pagination vs infinite scroll (for ecommerce): page # in URL, save/cont search, easy skip pages, better SEO
 export default function PaginationBar({
   currentPage,
   totalPages,

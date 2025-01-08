@@ -8,6 +8,7 @@ import UserButton from "@/components/UserButton";
 import { getLoggedInMember } from "@/wix-api/members";
 import { getCollection } from "@/wix-api/collections";
 import MainNavigation from "./MainNavigation";
+import SearchField from "@/components/SearchField";
 
 // * fetching data on server side fetches data before page has rendered
 export default async function Navbar() {
@@ -34,6 +35,7 @@ export default async function Navbar() {
           </Link>
           <MainNavigation collections={collections} />
         </div>
+        <SearchField className="max-w-96" />
         <div className="flex items-center justify-center gap-5">
           <UserButton loggedInMember={loggedInMember} />
           <ShoppingCartButton initialData={cart} />
