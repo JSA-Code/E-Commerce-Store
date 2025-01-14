@@ -1,19 +1,29 @@
 import { WixClient } from "@/lib/wix-client.base";
 import { cache } from "react";
 
-type ProductsSort = "last_updated" | "price_asc" | "price_desc";
+export type ProductsSort = "last_updated" | "price_asc" | "price_desc";
 
 interface QueryProductsFilter {
   q?: string;
   collectionIds?: string[] | string;
   sort?: ProductsSort;
+  priceMin?: number;
+  priceMax?: number;
   skip?: number;
   limit?: number;
 }
 
 export async function queryProducts(
   wixClient: WixClient,
-  { collectionIds, q, sort = "last_updated", limit, skip }: QueryProductsFilter,
+  {
+    collectionIds,
+    q,
+    sort = "last_updated",
+    limit,
+    skip,
+    priceMin,
+    priceMax,
+  }: QueryProductsFilter,
 ) {
   let query = wixClient.products.queryProducts();
 
@@ -38,13 +48,15 @@ export async function queryProducts(
       query = query.ascending("price");
       break;
     case "price_desc":
-      query = query.ascending("price");
+      query = query.descending("price");
       break;
     case "last_updated":
-      query = query.ascending("lastUpdated");
+      query = query.descending("lastUpdated");
       break;
   }
 
+  if (priceMin) query = query.ge("priceData.price", priceMin);
+  if (priceMax) query = query.le("priceData.price", priceMax);
   if (limit) query = query.limit(limit);
   if (skip) query = query.skip(skip);
 
