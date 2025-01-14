@@ -28,6 +28,7 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
+          {/* // * provider is client comp but passes w/ children prop therefore render separately and not converted to client comp  */}
           <ReactQueryProvider>
             <Navbar />
             {children}

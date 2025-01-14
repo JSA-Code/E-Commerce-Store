@@ -25,7 +25,7 @@ interface ShoppingCartButtonProps {
 export default function ShoppingCartButton({
   initialData,
 }: ShoppingCartButtonProps) {
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const cartQuery = useCart(initialData);
   // TODO how does array reduce function work?
   const totalQuantity =
@@ -38,14 +38,14 @@ export default function ShoppingCartButton({
     <>
       <div className="relative">
         {/* // * this Shadcn btn does has FIXED size of "[&_svg]:size-4" which prevents ShoppingCartIcon below from sizing correctly */}
-        <Button variant="ghost" size="icon" onClick={() => setSheetOpen(true)}>
+        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
           <ShoppingCartIcon />
           <span className="absolute right-0 top-0 flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
             {totalQuantity < 10 ? totalQuantity : "9+"}
           </span>
         </Button>
       </div>
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent className="flex flex-col sm:max-w-lg">
           <SheetHeader>
             <SheetTitle>
@@ -61,7 +61,7 @@ export default function ShoppingCartButton({
                 <ShoppingCartItem
                   key={item._id}
                   item={item}
-                  onProductLinkClicked={() => setSheetOpen(false)}
+                  onProductLinkClicked={() => setIsOpen(false)}
                 />
               ))}
             </ul>
@@ -78,7 +78,7 @@ export default function ShoppingCartButton({
                   <Link
                     className="text-primary hover:underline"
                     href="/shop"
-                    onClick={() => setSheetOpen(false)}
+                    onClick={() => setIsOpen(false)}
                   >
                     Start shopping now
                   </Link>

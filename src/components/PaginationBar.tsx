@@ -26,7 +26,7 @@ export default function PaginationBar({
   const searchParams = useSearchParams();
 
   function getLink(page: number) {
-    // * must create new obj that allows setting func
+    // * must create new obj that allows setting vals
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("page", page.toString());
 

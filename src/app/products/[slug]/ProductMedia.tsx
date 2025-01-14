@@ -1,4 +1,4 @@
-// * not using "use client" bc parent is already a client component and makes child a client comp
+// * not using "use client" bc parent already client comp, makes imported comp into client comp automatically
 import WixImage from "@/components/WixImage";
 import { cn } from "@/lib/utils";
 import { products } from "@wix/stores";
