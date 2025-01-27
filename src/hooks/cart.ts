@@ -43,6 +43,7 @@ export function useAddItemToCart() {
     mutationFn: (values: AddToCartValues) =>
       addToCart(wixBrowserClient, values),
     onSuccess(data) {
+      // TODO move to left side bc ShoppingCartButton opens on right side
       toast({ description: "Item added to cart" });
       queryClient.cancelQueries({ queryKey });
       queryClient.setQueryData(queryKey, data.cart);

@@ -30,7 +30,7 @@ export default function Home() {
         <div className="relative hidden h-full w-1/2 md:block">
           <Image
             src={banner}
-            alt="Awesome Sauce banner"
+            alt="Awesome Sauce Shop banner"
             className="h-full object-cover"
           />
           {/* // * gradient overlay, starting from LtoR, two transparent means 2/3 show more of that side */}

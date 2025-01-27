@@ -31,7 +31,7 @@ export default function RootLayout({
           {/* // * provider is client comp but passes w/ children prop therefore render separately and not converted to client comp  */}
           <ReactQueryProvider>
             <Navbar />
-            {children}
+            <div className="min-h-[50vh]">{children}</div>
             <Footer />
           </ReactQueryProvider>
           <Toaster />
